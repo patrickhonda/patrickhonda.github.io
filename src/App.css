@@ -1,38 +1,202 @@
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
+    text-align: center;
+    max-width: 100vw;
+    max-height: 100vh;
+    overflow-x: hidden;
+  }
+  
   .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+    height: 40vmin;
+    pointer-events: none;
   }
+  
+  @media (prefers-reduced-motion: no-preference) {
+    .App-logo {
+      animation: App-logo-spin infinite 20s linear;
+    }
+  }
+  
+  .App-header {
+    font-family: 'Monospace';
+    background-color: #000000;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color:#61dafb;
+  
+    
+  }
+  .App-header .ptf{
+      animation: skew2 7000ms infinite 3000ms steps(1, end);
+  }
+  
+  .App-link {
+    color: #61dafb;
+  }
+  @keyframes skew {
+    0% {
+      transform: skew(0, 0)
+    }
+
+    50% {
+      transform: skewY(30deg)
+    }
+    100% {
+      transform: skew(0,0)
+    }
+  }
+  @keyframes skew2 {
+    0% {
+      transform: skew(0, 0)
+    }
+    10.3% {
+        transform: scaleY(1000%);
+        color:#ad1253c5;
+    }
+    10.9% {
+        color:#000000;
+    }
+    11.2%{
+        color:#61dafb;
+    }
+    11.5% {
+        tranfsorm: scaleY(100%);
+
+    }
+    12%{
+        transform: skewY(-30deg);
+        color:#ad1253c5;
+    }
+    12.5% {
+        transform: skewY(0deg);
+        color:#61dafb;
+    }
+    20.5% {
+        color:#0bbb22c5;
+        text-shadow: 
+        0.5rem 0 0 rgba(255, 0, 0, .75),
+        -0.5rem -.05rem 0 rgba(0, 0, 255, .75),
+        0.5rem 0.3rem 0 rgba(0, 255, 0, .75);
+      transform: skewX(-50deg)
+    }
+    21% {
+      color:#61dafb;
+      transform: skew(0,0);
+      text-shadow: 
+      0rem 0 0 rgba(255, 0, 0, .75),
+      0rem 0 0 rgba(0, 0, 255, .75),
+      0rem 0 0 rgba(0, 255, 0, .75);
+    }
+    40.5% {
+      transform: skewX(50deg)
+    }
+    41% {
+      transform: skew(0,0);
+      text-shadow: 
+      0.5rem 0 0 rgba(255, 0, 0, .75),
+      -0.5rem -.05rem 0 rgba(0, 0, 255, .75),
+      0.5rem 0.3rem 0 rgba(0, 255, 0, .75);
+    }
+    61% {
+      color:#ad1253;
+      text-shadow: 
+      0rem 0 0 rgba(255, 0, 0, .75),
+      0rem 0 0 rgba(0, 0, 255, .75),
+      0rem 0 0 rgba(0, 255, 0, .75);
+    }
+    61.5% {
+      transform:  skewX(70deg);
+      color:#61dafb;
+    }
+    62% {
+      color:#ad1253;
+    }
+    62.5% {
+      transform:  skewX(0deg);
+      color:#61dafb;
+    }
+    81% {
+      color:#36ad1248;
+    }
+    81.4% {
+      transform:  skewX(-50deg);
+      color:#61dafb;
+    }
+    81.8% {
+      color:#028a205e;
+    }
+    82.2% {
+      transform:  skewX(0deg);
+      color:#61dafb;
+    }
+    100% {
+      transform: skew(0,0)
+    }
+  }
+
+  .load {
+    position: absolute;
+    bottom:10%;
+    right:10%;
+    color:white;
+}
+.code {
+    position: absolute;
+    top:50%;
+    right:50%;
+    animation: code 10000ms infinite steps(1, end);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.load span:nth-of-type(1) {
+    animation: loading 300ms infinite 600ms steps(1, end) 
+}
+.load span:nth-of-type(2) {
+    animation: loading 300ms infinite 1000ms  steps(1, end)
+}
+.load span:nth-of-type(3) {
+    animation: loading 300ms infinite 1500ms steps(1, end)
 }
 
-.App-link {
-  color: #61dafb;
+@keyframes loading {
+    0% {
+        color:white;
+    }
+    50% {
+        color:#000;
+    }
+    100% {
+        color:white;
+    }
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+@keyframes code {
+    0%{
+        visibility:hidden;
+    }
+    50% {
+        visibility: visible;
+    }
+    55% {
+        visibility: hidden;
+    }
+    60% {
+        visibility: visible;
+        top:10%;
+        right:0%;
+    }
+    74% {
+        visibility: hidden;
+    }
+    75% {
+        visibility: visible;
+        height:50%;
+        bottom:10%;
+        left:20%;
+    }
+    100% {
+        visibility: hidden;
+    }
 }
