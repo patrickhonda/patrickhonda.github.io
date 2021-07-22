@@ -1,0 +1,94 @@
+              EXPORT_SYMBOL_GPL(unlock_system_sleep);
+
+      void ksys_sync_helper(void)
+      {
+        ktime_t start;
+        long elapsed_msecs;
+
+        start = ktime_get();
+        ksys_sync();
+        elapsed_msecs = ktime_to_ms(ktime_sub(ktime_get(), start));
+        pr_info("Filesystems sync: %ld.%03ld seconds\n",
+          elapsed_msecs / MSEC_PER_SEC, elapsed_msecs % MSEC_PER_SEC);
+      }
+      EXPORT_SYMBOL_GPL(ksys_sync_helper);
+
+      /* Routines for PM-transition notifications */
+
+      static BLOCKING_NOTIFIER_HEAD(pm_chain_head);
+
+      int register_pm_notifier(struct notifier_block *nb)
+      {
+        return blocking_notifier_chain_register(&pm_chain_head, nb);
+      }
+      EXPORT_SYMBOL_GPL(register_pm_notifier);
+
+      int unregister_pm_notifier(struct notifier_block *nb)
+      {
+        return blocking_notifier_chain_unregister(&pm_chain_head, nb);
+      }
+      EXPORT_SYMBOL_GPL(unregister_pm_notifier);
+
+      int pm_notifier_call_chain_robust(unsigned long val_up, unsigned long val_down)
+      {
+        int ret;
+
+        ret = blocking_notifier_call_chain_robust(&pm_chain_head, val_up, val_down, NULL);
+
+        return notifier_to_errno(ret);
+      }
+
+      int pm_notifier_call_chain(unsigned long val)
+      {
+        return blocking_notifier_call_chain(&pm_chain_head, val, NULL);
+      }
+
+      /* If set, devices may be suspended and resumed asynchronously. */
+      int pm_async_enabled = 1;
+
+      static ssize_t pm_async_show(struct kobject *kobj, struct kobj_attribute *attr,
+                char *buf)
+      {
+        return sprintf(buf, "%d\n", pm_async_enabled);
+      }
+
+      static ssize_t pm_async_store(struct kobject *kobj, struct kobj_attribute *attr,
+                  const char *buf, size_t n)
+      {
+        unsigned long val;
+
+        if (kstrtoul(buf, 10, &val))
+          return -EINVAL;
+
+        if (val > 1)
+          return -EINVAL;
+
+        pm_async_enabled = val;
+        return n;
+      }
+
+      power_attr(pm_async);
+
+      #ifdef CONFIG_SUSPEND
+      static ssize_t mem_sleep_show(struct kobject *kobj, struct kobj_attribute *attr,
+                  char *buf)
+      {
+        char *s = buf;
+        suspend_state_t i;
+
+        for (i = PM_SUSPEND_MIN; i < PM_SUSPEND_MAX; i++)
+          if (mem_sleep_states[i]) {
+            const char *label = mem_sleep_states[i];
+
+            if (mem_sleep_current == i)
+              s += sprintf(s, "[%s] ", label);
+            else
+              s += sprintf(s, "%s ", label);
+          }
+
+        /* Convert the last space to a newline if needed. */
+        if (s != buf)
+          *(s-1) = '\n';
+
+        return (s - buf);
+      }
